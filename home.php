@@ -17,11 +17,7 @@ if (!isset($_SESSION['adm']) && !isset($_SESSION['user'])) {
 $tbody="";
 $res = mysqli_query($connect, "SELECT * FROM users WHERE id=" . $_SESSION['user']);
 $row = mysqli_fetch_array($res, MYSQLI_ASSOC);
-$res2 = mysqli_query($connect, "SELECT * FROM users 
-JOIN booking ON booking.fk_userID=users.id
-JOIN cars ON booking.fk_car=cars.id WHERE first_name=". $_SESSION['user']);
-$row2 = mysqli_fetch_array($res2, MYSQLI_ASSOC);
-mysqli_close($connect);
+
 ?>
 
 <!DOCTYPE html>
@@ -47,37 +43,21 @@ mysqli_close($connect);
 
 <body>
     <div class="container">
-        <div class="hero">
-            <img class="userImage" src="pictures/<?php echo $row['picture']; ?>" alt="<?php echo $row['first_name']; ?>">
-            <p class="text-white">Hi <?php echo $row['first_name']; ?></p>
+        <div class="hero rom">
+            <img class="userImage col-4" src="<?php echo $row['picture']; ?>" alt="<?php echo $row['first_name']; ?>">
+            <p class="text-white col-8">Hi <?php echo $row['first_name']; ?></p>
         </div>
-        <a href="logout.php?logout">Sign Out</a>
-        <a href="updateUser.php?id=<?php echo $_SESSION['user'] ?>">Update your profile</a>
-        <a href="cars/index.php?id=<?php echo $_SESSION['user'] ?>">Book a Car</a>
+
+        <div class="d-block m-auto p-3">
+        <a class="btn btn-danger" href="logout.php?logout">Sign Out</a>
+        <a class="btn btn-warning" href="updateUser.php?id=<?php echo $_SESSION['user'] ?>">Update your profile</a>
+        </div>
+
+       <div id="booking">
+       <a style="margin-top:15px" class="btn btn-success w-100" href="bookCar.php?id=<?php echo $_SESSION['user'] ?>">Book a car</a>
+       </div>
+
 
     </div>
-    <fieldset>
-        <legend class='h2'>book a car</legend>
-        <form action="actions/a_bookCar.php" method="post" enctype="multipart/form-data">
-            <table class="table">
-                <tr>
-                    <th>Car</th>
-                    <td><select name="model">
-                        <?php echo "" ?>
-                    </select></td>
-                </tr>
-
-                <tr>
-                    <th>User</th>
-                    <td><?php echo $row['first_name']?></td>
-                </tr>
-                <tr>
-                    <input type="hidden" name="id" value="<?php echo $row['id'] ?>" />
-                    <td>
-                        <button class="btn btn-success" type="submit">Book</button></td>
-                </tr>
-            </table>
-        </form>
-    </fieldset>
 </body>
 </html>

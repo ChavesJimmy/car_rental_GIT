@@ -117,7 +117,6 @@ mysqli_close($connect);
             ?>
                 <div class="alert alert-<?php echo $errTyp ?>">
                     <p><?php echo $errMSG; ?></p>
-                    <p><?php echo $uploadError; ?></p>
                 </div>
 
             <?php
@@ -132,14 +131,14 @@ mysqli_close($connect);
 
             <input type="email" name="email" class="form-control" placeholder="Enter Your Email" maxlength="40" value="<?php echo $email ?>" />
             <span class="text-danger"> <?php echo $emailError; ?> </span>
-            <div class="d-flex">
-                <input class='form-control w-50' type="date" name="date_of_birth" value="<?php echo $date_of_birth ?>" />
-                <span class="text-danger"> <?php echo $dateError; ?> </span>
+            
+            <input class='form-control w-100' type="date" name="date_of_birth" value="<?php echo $date_of_birth ?>" />
+            <span class="text-danger"> <?php echo $dateError; ?> </span>
 
-                <input class='form-control w-50' type="file" name="picture">
-                <span class="text-danger"> <?php echo $picError; ?> </span>
-            </div>
-            <input type="password" name="pass" class="form-control" placeholder="Enter Password" maxlength="15" />
+            <input class='form-control' type="text" name="picture" value="<?php echo $picture ?>" placeholder="Image (url)">
+            <span class="text-danger"> <?php echo $picError; ?> </span>
+
+                <input type="password" name="pass" class="form-control" placeholder="Enter Password" maxlength="15" />
             <span class="text-danger"> <?php echo $passError; ?> </span>
             <hr />
             <button type="submit" class="btn btn-block btn-primary" name="btn-signup">Sign Up</button>
