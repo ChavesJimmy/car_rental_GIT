@@ -14,36 +14,16 @@ if (isset($_SESSION["user"])) {
 
 $id = $_SESSION['adm'];
 $status = 'adm';
-$sql = "SELECT * FROM users WHERE status != '$status'";
-$sql2 = "SELECT * FROM booking 
-LEFT JOIN users ON users.id=booking.fk_userID
-LEFT JOIN  cars ON booking.fk_car=cars.id";
+$sql2 = "SELECT * FROM booking";
 
-$result = mysqli_query($connect, $sql);
 $result2 = mysqli_query($connect, $sql2);
 //this variable will hold the body for the table
-$tbody = '';
-$tbody2 = '';
-$rowImage = $result2->fetch_array(MYSQLI_ASSOC);
-$image=$rowImage['picture'];
 
-if ($result->num_rows > 0) {
-    while ($row = $result->fetch_array(MYSQLI_ASSOC)) {
-        $tbody .= "<tr>
-            <td><img class='img-thumbnail rounded-circle' src=' ".$row['picture']."' alt=" . $row['first_name'] . "/></td>
-            <td>" . $row['first_name'] . " " . $row['last_name'] . "</td>
-            <td>" . $row['date_of_birth'] . "</td>
-            <td>" . $row['email'] . "</td>
-            <td><a href='updateUser.php?id=" . $row['id'] . "'><button class='btn btn-primary btn-sm m-auto' type='button'>Edit</button></a>
-            <a href='deleteUser.php?id=" . $row['id'] . "'><button class='btn btn-danger btn-sm m-auto' type='button'>Delete</button></a></td>
-         </tr>";}
-         
+$tbody2 = '';
+if ($result2->num_rows > 0) {
          while ($row2 = $result2->fetch_array(MYSQLI_ASSOC)) {
          $tbody2 .= "<tr>
             <td>" . $row2['booking_code'] . "</td>
-            <td>" . $row2['first_name'] . "</td>
-            <td>" . $row2['model'] . "</td>
-            <td>" . $row2['price'] . "</td>
             <td class='m-auto'>
             <a href='updateBooking.php?id=" . $row2['id'] . "'><button class='btn btn-primary btn-sm' type='button'>Edit</button></a>
             <a href='deletebooking.php?id=". $row2['id'] ."'><button class='btn btn-danger btn-sm' type='button'>Delete</button></a></td>
@@ -51,6 +31,7 @@ if ($result->num_rows > 0) {
     else {
     $tbody = "<tr><td colspan='5'><center>No Data Available </center></td></tr>";
 }
+
 
 mysqli_close($connect);
 ?>
@@ -87,17 +68,28 @@ mysqli_close($connect);
 
 <body>
 
-
+<a href="dashUser.php">Manage Users</a>
+<a href="dash.Booking.php">Manage Bookings</a>
     <div class="container">
         <div class="row">
-            <div class="col-6">
-                <img  class="userImage" src="<?php echo $image ?>" alt="Adm avatar">
+            <div class="col-2">
                 <p class="">Administrator</p>
-                <a class="w-50 m-1 btn btn-danger" href="logout.php?logout">Sign Out</a>
+                <a class="w-100 m-1 btn btn-danger" href="dashboard.php">Back</a>
             </div>
-            <div class="col-12">
-                <a class="btn btn-success" href="dashUser.php">Manage Users</a>
-                <a class="btn btn-dark" href="dashBooking.php">Manage Bookings</a></div>
+            
+                <p class='h2'>Booking</p>
+
+                <table class='table table-striped'>
+                    <thead class='table-success'>
+                        <tr>
+                            <th>Booking Code</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?= $tbody2 ?>
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>

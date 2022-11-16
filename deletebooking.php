@@ -13,6 +13,7 @@ if (!isset($_SESSION['adm']) && !isset($_SESSION['user'])) {
 
 require_once 'components/db_connect.php';
 
+
 if ($_GET['id']) {
     $id = $_GET['id'];
     $sql = "SELECT * FROM booking WHERE id = {$id}";
@@ -25,10 +26,23 @@ if ($_GET['id']) {
     } else {
         header("location: error.php");
     }
-    mysqli_close($connect);
 } else {
     header("location: error.php");
 }
+if ($_POST) {
+    $id = $_POST['id'];
+    $sql2 = "DELETE FROM booking WHERE id = {$id}";
+    if ($connect->query($sql2) === TRUE) {
+        $class = "alert alert-success";
+        $message = "Successfully Deleted!";
+        header("refresh:3;url=dashBooking.php");
+    } else {
+        $class = "alert alert-danger";
+        $message = "The entry was not deleted due to: <br>" . $connect->error;
+    }
+}
+mysqli_close($connect);
+
 ?>
 
 <!DOCTYPE html>
@@ -54,6 +68,9 @@ if ($_GET['id']) {
 </head>
 
 <body>
+<div class="<?php echo $class; ?>" role="alert">
+        <p><?php echo ($message) ?? ''; ?></p>
+    </div>
     <fieldset>
         <legend class='h2 mb-3'>Delete Booking :                <?php echo $booking ?>
     </legend>
@@ -71,9 +88,8 @@ if ($_GET['id']) {
         </table>
 
         <h3 class="mb-4">Do you really want to delete this Booking?</h3>
-        <form action="actions/a_delete.php" method="post">
+        <form method="post">
             <input type="hidden" name="id" value="<?php echo $id ?>" />
-            <input type="hidden" name="picture" value="<?php echo $picture ?>" />
             <button class="btn btn-danger" type="submit">Yes, delete it!</button>
             <a href="index.php"><button class="btn btn-warning" type="button">No, go back!</button></a>
         </form>

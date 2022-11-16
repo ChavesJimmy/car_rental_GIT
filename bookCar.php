@@ -6,6 +6,7 @@ $res = mysqli_query($connect, "SELECT * FROM users WHERE id=" . $_SESSION['user'
 $row = mysqli_fetch_array($res, MYSQLI_ASSOC);
 $user=$row['first_name'];
 $userID=$row['id'];
+var_dump($userID);
 
 $resBooking = mysqli_query($connect, "SELECT * FROM booking WHERE id=" . $_SESSION['user']);
 $rowBooking = mysqli_fetch_array($resBooking, MYSQLI_ASSOC);
@@ -70,7 +71,7 @@ if ($_GET['id']) {
                 </td>
                  <tr>
                     <th>User_id</th>
-                    <td><input type="number" name="fk_userID" value="<?php echo $UserID ?>">
+                    <td><input type="number" name="fk_userID" value="<?php echo $userID ?>">
                 </td>
                 <tr>
                     <th>User</th>

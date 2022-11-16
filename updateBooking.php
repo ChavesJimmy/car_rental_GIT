@@ -6,8 +6,6 @@ if (!isset($_SESSION['adm']) && !isset($_SESSION['user'])) {
     header("Location: index.php");
     exit;
 }
-
-$backBtn = '';
 //if it is a user it will create a back button to home.php
 if (isset($_SESSION["user"])) {
     $backBtn = "home.php";
@@ -16,50 +14,48 @@ if (isset($_SESSION["user"])) {
 if (isset($_SESSION["adm"])) {
     $backBtn = "dashboard.php";
 }
-
 //fetch and populate form
-
 if (isset($_GET['id'])) {
     if ($_GET['id']) {
         $id = $_GET['id'];
-        $sql = "SELECT * FROM cars WHERE id = {$id}";
+        $sql = "SELECT * FROM booking WHERE id = {$id}";
         $result = mysqli_query($connect, $sql);
             if (mysqli_num_rows($result) == 1) {
                 $data = mysqli_fetch_assoc($result);
-                $car = $data['model'];
-                $carID = $data['id'];
-        }}
+                $carID=$data['fk_car'];
+                $bookCode=$data['booking_code'];
+                $userID=$data['fk_userID'];
+            }}
         $id = $_GET['id'];
         $sql = "SELECT * FROM users WHERE id = {$id}";
         $result = mysqli_query($connect, $sql);
         
             if (mysqli_num_rows($result) == 1) {
             $data2 = mysqli_fetch_assoc($result);
-            $user=$data2['first_name'];
             $userID=$data2['id'];
     }
 }
 
+
 //update
 $class = 'd-none';
 if (isset($_POST["submit"])) {
-    $user = $_POST['fk_userID'];
-    $car = $_POST['fk_car'];
-    $booking = $_POST['booking_code'];
-    $sql = "UPDATE booking SET fk_userID='$user', fk_car = '$car', booking_code='$booking'  WHERE id = {$id}";
+    $id = $_POST['id'];
+    $carID = $_POST['fk_car'];
+    $userID = $_POST['fk_userID'];
+    $sql = "UPDATE booking SET fk_car='$carID', fk_userID='$userID' WHERE id = {$id}";
     if (mysqli_query($connect, $sql) === true) {
         $class = "alert alert-success";
         $message = "The record was successfully updated";
-        header("refresh:3;url=updateUser.php?id={$id}");
+        header("refresh:5;url=updateBooking.php?id={$id}");
     } else {
         $class = "alert alert-danger";
         $message = "Error while updating record : <br>" . $connect->error;
-        header("refresh:3;url=updateUser.php?id={$id}");
+        header("refresh:5;url=updateBooking.php?id={$id}");
     }
 }
 
 
-mysqli_close($connect);
 ?>
 
 <!DOCTYPE html>
@@ -93,13 +89,8 @@ mysqli_close($connect);
         <fieldset>
         <legend class='h2'>UPDATE BOOKING</legend>
 
-        <form action="actions/a_book.php" method="post" enctype="multipart/form-data">
+        <form method="post" enctype="multipart/form-data">
             <table class="table">
-                <tr>
-                    <th>Car</th>
-                    <td><?php echo $car ?>
-                </td>
-                </tr>
                 <tr>
                     <th>Car ID</th>
                     <td><input type="number" name="fk_car" value="<?php echo $carID ?>">
@@ -107,20 +98,17 @@ mysqli_close($connect);
                 </tr>
                 <tr>
                     <th>Booking Code</th>
-                    <td><input type="number" name="booking_code">
+                    <td><?= $bookCode ?>
                 </td>
                  <tr>
                     <th>User_id</th>
-                    <td><input type="number" name="fk_userID" value="<?php echo $UserID?>">
+                    <td><input type="number" name="fk_userID" value="<?php echo $userID ?>">
                 </td>
-                <tr>
-                    <th>User</th>
-                    <td><?php echo $user?></td>
-                </tr>
+              
                 <tr>
                     <input type="hidden" name="id" value="<?php echo $data['id'] ?>" />
                     <td>
-                        <button class="btn btn-success" type="submit">Book</button></td>
+                        <button class="btn btn-success" name="submit" type="submit">Update</button></td>
                     <td>
                         <a href="index.php"><button class="btn btn-warning" type="button">Back</button></a></td>
                 </tr>

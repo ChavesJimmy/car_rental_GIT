@@ -35,7 +35,7 @@ if ($_POST) {
     if ($connect->query($sql) === TRUE) {
         $class = "alert alert-success";
         $message = "Successfully Deleted!";
-        header("refresh:3;url=dashboard.php");
+        header("refresh:3;url=dashUser.php");
     } else {
         $class = "alert alert-danger";
         $message = "The entry was not deleted due to: <br>" . $connect->error;
