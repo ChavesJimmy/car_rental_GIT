@@ -24,7 +24,8 @@ $result2 = mysqli_query($connect, $sql2);
 //this variable will hold the body for the table
 $tbody = '';
 $tbody2 = '';
-$image="";
+$rowImage = $result2->fetch_array(MYSQLI_ASSOC);
+$image=$rowImage['picture'];
 
 if ($result->num_rows > 0) {
     while ($row = $result->fetch_array(MYSQLI_ASSOC)) {
@@ -35,21 +36,21 @@ if ($result->num_rows > 0) {
             <td>" . $row['email'] . "</td>
             <td><a href='updateUser.php?id=" . $row['id'] . "'><button class='btn btn-primary btn-sm m-auto' type='button'>Edit</button></a>
             <a href='deleteUser.php?id=" . $row['id'] . "'><button class='btn btn-danger btn-sm m-auto' type='button'>Delete</button></a></td>
-         </tr>";
+         </tr>";}
+         
          while ($row2 = $result2->fetch_array(MYSQLI_ASSOC)) {
          $tbody2 .= "<tr>
             <td>" . $row2['booking_code'] . "</td>
             <td>" . $row2['first_name'] . "</td>
             <td>" . $row2['model'] . "</td>
             <td>" . $row2['price'] . "</td>
-            <td class='m-auto'><a href='updateBooking.php?id=" . $row['id'] . "'><button class='btn btn-primary btn-sm' type='button'>Edit</button></a>
-            <a href='deletebooking.php?id=" . $row['id'] . "'><button class='btn btn-danger btn-sm' type='button'>Delete</button></a></td>
-         </tr>";}
-    }
-} else {
+            <td class='m-auto'>
+            <a href='updateBooking.php?id=" . $row2['id'] . "'><button class='btn btn-primary btn-sm' type='button'>Edit</button></a>
+            <a href='deletebooking.php?id=". $row2['id'] ."'><button class='btn btn-danger btn-sm' type='button'>Delete</button></a></td>
+         </tr>";}}
+    else {
     $tbody = "<tr><td colspan='5'><center>No Data Available </center></td></tr>";
 }
-$row = $result->fetch_array(MYSQLI_ASSOC);
 
 mysqli_close($connect);
 ?>
@@ -90,9 +91,6 @@ mysqli_close($connect);
             <div class="col-2">
                 <img  class="userImage" src="<?php echo $image ?>" alt="Adm avatar">
                 <p class="">Administrator</p>
-                
-                <a href="cars/index.php" class="w-100 m-1 btn btn-success col-12">Book or Add a Car</a>
-<br>
                 <a class="w-100 m-1 btn btn-danger" href="logout.php?logout">Sign Out</a>
             </div>
             <div class="col-8 mt-2">

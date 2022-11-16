@@ -2,34 +2,22 @@
 session_start();
 
 require_once 'components/db_connect.php';
+$res = mysqli_query($connect, "SELECT * FROM users WHERE id=" . $_SESSION['user']);
+$row = mysqli_fetch_array($res, MYSQLI_ASSOC);
+$user=$row['first_name'];
+$userID=$row['id'];
+
+$resBooking = mysqli_query($connect, "SELECT * FROM booking WHERE id=" . $_SESSION['user']);
+$rowBooking = mysqli_fetch_array($resBooking, MYSQLI_ASSOC);
 
 if ($_GET['id']) {
     $id = $_GET['id'];
-    $sql = "SELECT * FROM users WHERE id = {$id}";
-    $sql2 = "SELECT * FROM cars";
+    $sql = "SELECT * FROM cars WHERE id = {$id}";
     $result = mysqli_query($connect, $sql);
-    $result2 = mysqli_query($connect,$sql2);
     if (mysqli_num_rows($result) == 1) {
         $data = mysqli_fetch_assoc($result);
-        $data2 = mysqli_fetch_assoc($result2);
-        $user= $data['first_name'];
-        $resultSup = mysqli_query($connect, "SELECT * FROM cars");
-        $car=$data2['model'];
-        $available= $data2['available'];
-        $resultBook = mysqli_query($connect, $sql2);
-        $bookList = "";
-        if  (mysqli_num_rows($resultBook) > 0) {
-            while ($row = $resultBook->fetch_array(MYSQLI_ASSOC)) {
-                if ($row['model'] == $available) {
-                    $bookList .= "<option selected value='{$row['model']}'>{$row['model']}</option>";
-                } else  {
-                    $bookList .= "<option value='{$row['model']}'>{$row['model']}</option>" ;
-                }
-            }
-        } else {
-            $supList = "<li>There are no cars registered</li>";
-        }
-
+        $car = $data['model'];
+        $carID = $data['id'];
     } else {
         header("location: error.php");
     }
@@ -37,6 +25,7 @@ if ($_GET['id']) {
 } else {
     header("location: error.php");
 }
+
 ?>
 
 <!DOCTYPE html>
@@ -61,16 +50,28 @@ if ($_GET['id']) {
 
 <body>
     <fieldset>
-        <legend class='h2'>booking request from <?php echo $user ?></legend>
+        <legend class='h2'>BOOKING REQUEST</legend>
+
         <form action="actions/a_book.php" method="post" enctype="multipart/form-data">
             <table class="table">
                 <tr>
                     <th>Car</th>
-                    <td><select class="form-select" type="number" name="fk_car" placeholder="Car" value="<?php echo $bookCar ?>">
-                    <?= $bookList ?>
-                </select></td>
+                    <td><?php echo $car ?>
+                </td>
                 </tr>
-
+                <tr>
+                    <th>Car ID</th>
+                    <td><input type="number" name="fk_car" value="<?php echo $carID ?>">
+                </td>
+                </tr>
+                <tr>
+                    <th>Booking Code</th>
+                    <td><input type="number" name="booking_code">
+                </td>
+                 <tr>
+                    <th>User_id</th>
+                    <td><input type="number" name="fk_userID" value="<?php echo $UserID ?>">
+                </td>
                 <tr>
                     <th>User</th>
                     <td><?php echo $user?></td>
