@@ -59,6 +59,26 @@ if (mysqli_num_rows($result)  > 0) {
                 <div class='mb-3'>";
 
             }}}
+
+            //php contact form
+            if($_SERVER["REQUEST_METHOD"] == 'POST'){ 
+                $email = filter_var($_POST["email"], FILTER_SANITIZE_EMAIL); // simple validation if you insert an email
+                $msg = filter_var($_POST["msg"]); // simple validation if you insert a string
+                //$message='';
+                // mail function in php look like this  (mail(To, subject, Message, Headers, Parameters))
+                //$headers = "FROM : ". $email . "\r\n";
+                //$myEmail = "youremail@example.com";
+                if($msg){
+                    $sql = "INSERT INTO messages(user_email, message)
+                    VALUES('$$email', '$msg')"; //insert query
+                    $result = mysqli_query($connect, $sql); //trigger the query 
+                    $message = ($result) ? "Message sent and saved to the database" : "there was an error";
+                    echo "sent";
+                }else {
+                        echo "error";
+                }
+
+        }
 ?>
 
 <!DOCTYPE html>
@@ -121,6 +141,20 @@ if (mysqli_num_rows($result)  > 0) {
                 <?= $tbody; ?>
             </tbody>
         </table>
+        <legend class='h2'>Contact</legend>
+        <form method="POST" class="container">
+                <div class="mb-3">
+                  <label for="exampleFormControlInput1" class="form-label">Email address</label>
+                  <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="name@example.com" name="email">
+                </div>
+                <div class="mb-3">
+                  <label for="exampleFormControlTextarea1" class="form-label">Example textarea</label>
+                  <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" name="msg"></textarea>
+                </div>
+                <div class="col-auto">
+                    <button type="submit" class="btn btn-primary mb-3">Send</button>
+                  </div>
+         </form>
        <!-- <div id="booking">
        <a style="margin-top:15px" class="btn btn-success w-100" href="bookCar.php?id=<?php echo $_SESSION['user'] ?>">Book a car</a>
        </div> -->

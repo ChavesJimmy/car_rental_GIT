@@ -97,7 +97,10 @@ mysqli_close($connect);
             </div>
             <div class="col-12">
                 <a class="btn btn-success" href="dashUser.php">Manage Users</a>
-                <a class="btn btn-dark" href="dashBooking.php">Manage Bookings</a></div>
+                <a class="btn btn-dark" href="dashBooking.php">Manage Bookings</a>
+                <a class="btn btn-warning" href="message.php">User Messages</a>
+
+            </div>
             </div>
         </div>
     </div>
