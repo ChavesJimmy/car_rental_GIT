@@ -1,9 +1,9 @@
 <?php
 
-$localhost = "173.212.235.205";
-$username = "jimmycodefactory_car_rent";
-$password = "CarRent1!";
-$dbname = "jimmycodefactory_car_rent";
+$localhost = "127.0.0.1";
+$username = "root";
+$password = "";
+$dbname = "car_rental";
 
 // create connection
 $connect = new  mysqli($localhost, $username, $password, $dbname);
